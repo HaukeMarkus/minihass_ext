@@ -1,0 +1,223 @@
+#
+# Original by Fredrik Persson
+# Extension made by Hauke Kröger to take garbage types (regular, bio, recycable, paper) as colored icons,
+#
+---
+custom_card_garbage_collection:
+  variables:
+    label:
+    counter:
+    hausmuell:
+    paper:
+    bio:
+    gelbersack:
+  label: "[[[ return variables.label ]]]"
+  show_name: false
+  show_icon: false
+  show_label: true
+  show_state: false
+  tap_action: none
+  styles:
+    grid:
+      - grid-template-areas: '"item1 l item3" "item1 item2 item3"'
+      - grid-template-rows: 3fr 3fr
+      - grid-template-columns: 18% 62% 20%
+      - column-gap: 5%
+      - row-gap: 8px
+    card:
+      - height: 100%
+      - border-radius: "var(--border-radius)"
+      - padding: 2rem
+      - overflow: visible
+      - justify-items: center
+      - justify-content: center
+
+    label:
+      - text-align: left
+      - font-size: "var(--fs-400)"
+      - font-family: "Montserrat"
+      - font-weight: 500
+      - justify-self: start
+      - align-self: end
+      - color: "var(--contrast-100)"
+    custom_fields:
+      item1:
+        - text-align: center
+        - font-size: "var(--fs-xl)"
+        - font-family: Montserrat
+        - font-weight: 500
+        - justify-self: center
+        - align-self: center
+        - color: "var(--contrast-100)"
+        - overflow: visible
+        - z-index: 1
+      item2:
+        - align-self: start
+        - align-content: start
+        - align-items: start
+        - background: none
+  custom_fields:
+    item1: >
+      [[[ return variables.counter ]]]
+
+    item2:
+      card:
+        type: "custom:button-card"
+        entity: "[[[ return entity.entity_id ]]]"
+        label:
+        show_name: false
+        show_icon: true
+        show_label: true
+        show_state: false
+        tap_action:
+          action: toggle
+        styles:
+          grid:
+            - grid-template-areas: '"i l"'
+            - grid-template-rows: 1fr
+            - grid-template-columns: min-content 1fr
+            - column-gap: 8px
+          card:
+            - background: none
+            - overflow: visible
+            - padding: 0
+          label:
+            - text-align: left
+            - font-size: "var(--fs-400)"
+            - font-family: "Montserrat"
+            - font-weight: 500
+            - color: "var(--contrast-66)"
+            - text-align: left
+            - justify-self: start
+          img_cell:
+            - justify-self: center
+          icon:
+            - width: "var(--button-small)"
+            - color: "var(--contrast-66)"
+            - padding: 0
+            - margin: 0
+        state:
+          - value: "off"
+            label: Benachrichtigung aus
+            icon: mdi:toggle-switch-off-outline
+          - value: "on"
+            label: Benachrichtigung an
+            icon: mdi:toggle-switch-outline
+
+    # item3 is the right-most element containing 4 icons specifying the waste type.
+    item3:
+      card:
+        type: "custom:button-card"
+        entity: "[[[ return entity.entity_id ]]]"
+        label:
+        show_name: false
+        show_icon: false
+        show_label: false
+        show_state: false
+        tap_action:
+          action: none
+        styles:
+          grid:
+            - grid-template-areas: '"hm" "pa" "gs" "bi"'
+            - grid-template-rows: min-content min-content min-content min-content
+            - grid-template-columns: min-content
+            #- column-gap: 8px
+          card:
+            - background: none
+            - overflow: visible
+            - padding: 0
+          custom_fields:
+            hm:
+              - align-self: middle
+              - justify-self: start
+              - padding-bottom: 2px
+              - display: inline-block
+            pa:
+              - padding-bottom: 2px
+              - align-self: middle
+              - justify-self: start
+              - display: inline-block
+            gs:
+              - padding-bottom: 2px
+              - align-self: middle
+              - justify-self: start
+              - display: inline-block
+            bi:
+              - align-self: middle
+              - justify-self: start
+              - display: inline-block
+        custom_fields:
+          hm: >
+            [[[
+              if( variables.hausmuell == "True") {
+              return `<ha-icon 
+                icon="far:trash-can"
+                style="width: 18px; height: 18px; color: var(--color-cerise); animation: shake 4s linear infinite">
+                </ha-icon>`
+              }
+              else {
+                return `<ha-icon 
+                icon="far:trash-can"
+                style="width: 18px; height: 18px; color: var(--contrast-33);">
+                </ha-icon>`
+              }
+            ]]]
+
+          pa: >
+            [[[
+              if( variables.paper == "True") {
+                return `<ha-icon
+                  icon="fas:box"
+                  style="width: 18px; height: 18px; color: var(--color-blue); animation: shake 4s linear infinite">
+                  </ha-icon>`
+              }
+              else {
+                return `<ha-icon
+                  icon="fas:box"
+                  style="width: 18px; height: 18px; color: var(--contrast-33);">
+                  </ha-icon>`                
+              }
+            ]]]
+
+          gs: >
+            [[[
+              if( variables.gelbersack == "True") {
+                return `<ha-icon
+                  icon="fas:recycle"
+                  style="width: 18px; height: 18px; color: var(--color-yellow); animation: shake 4s linear infinite">
+                  </ha-icon>`
+              }
+              else {
+                return `<ha-icon
+                  icon="fas:recycle"
+                  style="width: 18px; height: 18px; color: var(--contrast-33);">
+                  </ha-icon>`
+              }
+            ]]]
+
+          bi: >
+            [[[
+              if( variables.bio == "True") {
+                return `<ha-icon
+                  icon="fas:leaf"
+                  style="width: 18px; height: 18px; color: var(--color-green); animation: shake 4s linear infinite">
+                  </ha-icon>`
+              }
+              else {
+                return `<ha-icon
+                  icon="fas:leaf"
+                  style="width: 18px; height: 18px; color: var(--contrast-33);">
+                  </ha-icon>`
+              }
+            ]]]
+        extra_styles: |
+          @keyframes rotate {
+            from {transform: rotateY(-deg);}
+            to {transform: rotateY(360deg);}
+          }
+          @keyframes shake {
+            0% {transform: rotate(0deg);}
+            25% {transform: rotate(-15deg);}
+            75% {transform: rotate(15deg);}
+            100% {transform: rotate(0deg);}
+          }

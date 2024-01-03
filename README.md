@@ -1,5 +1,5 @@
 # minihass_ext
-Extensions I made for minihass
+Extensions I made for Fredrik's [minihass](https://github.com/fredrikpersson92/minihass/)
 
 
 ## Setting up garbage collection

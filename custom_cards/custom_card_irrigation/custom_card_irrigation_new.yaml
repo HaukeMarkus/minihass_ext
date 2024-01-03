@@ -1,0 +1,132 @@
+---
+custom_card_irrigation_new:
+  variables:
+    name:
+    zone_name:
+    background:
+    timer:
+  triggers_update: "all"
+  name: "[[[ return variables.name ]]]"
+  icon: mdi:water-outline
+  show_name: true
+  show_icon: true
+  show_label: true
+  show_state: false
+  label: "[[[ return variables.zone_name ]]]"
+  state:
+    - value: "off"
+      icon: mdi:water-outline
+      styles:
+        icon:
+          - color: "var(--contrast-100)"
+
+    - value: "on"
+      icon: mdi:water
+      styles:
+        icon:
+          - color: "var(--color-blue)"
+          - animation: rotate 2s linear infinite
+  styles:
+    grid:
+      - grid-template-areas: '"n i" "l l" "item2 item2" "item3 item3"'
+      - grid-template-rows: min-content min-content min-content min-content
+      - grid-template-columns: 67% 33%
+    card:
+      - height: 100%
+      - border-radius: "var(--border-radius)"
+      - padding-top: 1rem
+      - padding-left: 1rem
+      - padding-right: 1rem
+      - overflow: visible
+      - justify-items: center
+      - justify-content: center
+    name:
+      - text-align: left
+      - font-size: "var(--fs-600)"
+      - font-family: Montserrat
+      - font-weight: 600
+      - justify-self: start
+      - align-self: start
+      - color: "var(--contrast-100)"
+      - z-index: 2
+      - overflow: visible
+      - padding-bottom: 1rem
+    label:
+      - padding: 0
+      - text-align: left
+      - font-size: "var(--fs-500)"
+      - font-family: Montserrat
+      - font-weight: 500
+      - justify-self: start
+      - align-self: start
+      - color: "var(--contrast-100)"
+      - z-index: 2
+    icon:
+      - height: 100%
+      - justify-self: end
+      - color: "var(--color-blue)"
+    img_cell:
+      # - display: inline
+      - justify-self: end
+      - justify-content: end
+    custom_fields:
+      # item1:
+      #   - height: 100%
+      #   - justify-self: end
+      #   - color: "var(--color-blue)"
+
+      item2:
+        - align-self: start
+        - align-content: left
+        - align-items: start
+
+      item3:
+  extra_styles: |
+    @keyframes rotate {
+      from {transform: rotateY(-deg);}
+      to {transform: rotateY(360deg);}
+    }
+
+  custom_fields:
+    item2: # increment input_datetime timer for zone
+      card:
+        type: custom:button-card
+        entity: "[[[ return variables.timer ]]]"
+        template:
+          - input_val_inc
+
+    item3: # timer bar card without label and icon
+      card:
+        type: custom:timer-bar-card
+        card_mod:
+          style: |
+            ha-card {
+              --ha-card-background: none;
+            }
+            .card-content {
+              text-align: left;
+              color: var(--contrast-100);
+              font-size: 1rem;
+              font-family: Montserrat;
+              font-weight: 500;
+            } 
+            :host {
+              --card-mod-icon-color: var(--contrast-66);
+            }
+
+        entities:
+          - entity: "[[[ return entity.entity_id ]]]"
+            icon: mdi:water-outline
+            active_icon: mdi:water
+            name: "[[[ return variables.zone_name ]]]"
+            translations:
+              "off": nicht aktiv
+              "on": laufend
+            bar_radius: 5px
+        duration:
+          attribute: current_duration
+        tap_action:
+          action: more-info
+        layout: full_row
+        text-width: 0px # do not show remaining
+        debug: false

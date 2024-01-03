@@ -1,0 +1,173 @@
+#
+# The manual card controls the manual irrigation activity. It takes the name, zone name and timer.
+# The name is basically the title of the card.
+# The zone can be activated or deactivated
+# The card holds the no. of seconds to run
+# If tapped, the manual service of irrigation unlimited is triggered, given the zone entity, and time
+# set.
+#
+---
+custom_card_manual:
+  variables:
+    name:
+    timer:
+    background:
+    zone_name:
+  name: "[[[ return variables.name ]]]"
+  label: "[[[ return variables.zone_name ]]]"
+  show_name: true
+  show_icon: false
+  show_label: true
+  show_state: false
+  tap_action:
+    action: call-service
+    service: irrigation_unlimited.manual_run
+    service_data:
+      time: "[[[ return states[variables.timer].state ]]]"
+      entity_id: "[[[ return entity.entity_id ]]]"
+  state:
+    - value: "on"
+      styles:
+        card:
+          - background: "var(--gradient-green)"
+          - animation: blink 1s ease infinite
+
+    - value: "off"
+      styles:
+        card:
+          - background: "var(--gradient-blue)"
+
+  styles:
+    grid: # basically a 4x2 matrix: first row name, second row label, third the toggle, forth timer secs
+      - grid-template-areas: '"n n" "l l" "tggl tggl" "tm tml"'
+      - grid-template-rows: 1fr min-content min-content min-content
+      - column-gap: 8px
+    card:
+      - height: 100%
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: 1rem
+      - background: "[[[ return variables.background ]]]"
+      - overflow: invisible
+      - aspect-ratio: 2/1
+    name:
+      - position: absolute
+      - top: 1rem
+      - text-align: left
+      - font-size: "var(--fs-600)"
+      - font-family: Montserrat
+      - font-weight: 600
+      - justify-self: start
+      - align-self: start
+      - color: "var(--color-white)"
+      - z-index: 2
+      - overflow: visible
+    label:
+      - position: absolute
+      - top: 4rem
+      - text-align: left
+      - font-size: "var(--fs-500)"
+      - font-family: Montserrat
+      - font-weight: 500
+      - justify-self: start
+      - align-self: start
+      - color: "var(--color-white)"
+      - z-index: 2
+      - overflow: visible
+    custom_fields:
+      tml:
+        - top: 3rem
+        - text-align: right
+        - font-size: "var(--fs-400)"
+        - font-family: Montserrat
+        - font-weight: 400
+        - justify-self: end
+        - align-self: center
+        - color: "var(--color-white)"
+        - z-index: 2
+        - overflow: visible
+      tm:
+        # - position: absolute
+        - top: 5rem
+        - text-align: left
+        - font-size: "var(--fs-1000)"
+        - font-family: Montserrat
+        - font-weight: 400
+        - justify-self: start
+        - align-self: start
+        - color: "var(--color-white)"
+        - z-index: 2
+        - overflow: visible
+      tggl:
+        - align-self: start
+        - align-content: start
+        - align-items: start
+        - background: none
+
+  custom_fields:
+    tm: "[[[ return states[variables.timer].attributes.timestamp ]]]"
+    tml: Sekunden
+    tggl:
+      card:
+        type: "custom:button-card"
+        entity: "[[[ return entity.entity_id ]]]"
+        tap_action:
+          action: call-service
+          service: >
+            [[[
+              var stat = entity.attributes.enabled;
+              if (stat == true)
+                return "irrigation_unlimited.disable";
+              else
+                return "irrigation_unlimited.enable";
+            ]]]
+          service_data:
+            entity_id: entity
+
+        icon: >
+          [[[
+            var stat = entity.attributes.enabled;
+            if (stat == true ) {
+              return "mdi:toggle-switch-outline";
+            }
+            else
+              return "mdi:toggle-switch-off-outline";
+          ]]]
+        label: >
+          [[[
+            var stat = entity.attributes.enabled;
+            if (stat == true ) {
+              return "Zone ein";
+            }
+            else
+              return "Zone aus";
+          ]]]
+        show_name: false
+        show_icon: true
+        show_label: true
+        show_state: false
+        styles:
+          grid:
+            - grid-template-areas: '"i l"'
+            - grid-template-rows: 1fr
+            - grid-template-columns: min-content 1fr
+            - column-gap: 8px
+          card:
+            - background: none
+            - overflow: visible
+            - padding: 0
+          label:
+            - text-align: left
+            - font-size: "var(--fs-400)"
+            - font-family: "Montserrat"
+            - font-weight: 500
+            - color: "var(--color-white)"
+            - text-align: left
+            - justify-self: start
+          img_cell:
+            - justify-self: center
+          icon:
+            - width: "var(--button-small)"
+            - color: "var(--color-white)"
+            - padding: 0
+            - margin: 0

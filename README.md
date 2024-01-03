@@ -5,6 +5,8 @@ Extensions I made for minihass
 ## Setting up garbage collection
 
 I have four sensors for the type of garbage and the days with the minimal days across all types when collection is scheduled.
+![](/pictures/garbage_collection.gif)
+
 The dashboard part is here:
 
 ```yaml

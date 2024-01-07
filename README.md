@@ -69,3 +69,12 @@ My dashboard piece is as follows:
           timer: input_datetime.irrigation_timer_z1
         entity: binary_sensor.irrigation_unlimited_c2_z1
 ```
+
+## Setting up a window-shuttor card
+
+For the controlling my shutters I made a card based on the minimalist cover card. 
+Mine only considers showing basic info and basic controlling:
+
+A sample of it...:
+
+![](/pictures/shutters.png)

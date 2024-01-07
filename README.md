@@ -78,3 +78,23 @@ Mine only considers showing basic info and basic controlling:
 A sample of it...:
 
 ![](/pictures/shutters.png)
+
+Using it in your dashboard:
+
+```yaml
+  # Front shutters
+  - type: "custom:button-card"
+    template:
+      - custom_card_section_title
+    variables:
+      section_title: Front
+
+  - type: horizontal-stack
+    cards:
+      - type: "custom:button-card"
+        template:
+          - custom_card_cover
+        entity: cover.rolladen_bad
+        variables:
+          cover_name: Klo
+```

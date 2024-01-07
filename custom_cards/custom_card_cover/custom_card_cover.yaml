@@ -1,0 +1,247 @@
+---
+### Custom-card template: Card Cover ###
+### uses the covers name, state and position as well as the item1 control elements.
+### Item1 has the cover.up, cover.stop and cover.down action to be fired.
+### The middle button shows the state icon and color-background: blue for closed, yellow for up.
+### If pressed, the stop action will be triggered.
+custom_card_cover:
+  variables:
+    cover_name:
+  show_icon: false
+  show_name: true
+  show_label: true
+  show_state: true
+  tap_action: none
+  name: "[[[ return variables.cover_name ]]]"
+  entity: "[[[ return entity.entity_id ]]]"
+  label: >
+    [[[ 
+      var dc = entity.attributes.device_class
+      if (dc != 'garage')
+        return entity.attributes.current_position + ' %' 
+      else
+        return "";
+    ]]]
+  styles:
+    grid:
+      - grid-template-areas: '"n" "item1" "s" "l"'
+      - grid-template-columns: 1fr
+      - grid-template-rows: min-content min-content min-content min-content
+      - row-gap: "8px"
+    card:
+      - height: 100%
+      - width: 100%
+      - border-radius: "var(--border-radius)"
+      - padding: 2rem
+      - overflow: visible
+    name:
+      - text-align: center
+      - font-size: "var(--fs-400)"
+      - font-family: "Montserrat"
+      - font-weight: 800
+      - justify-self: center
+      - align-self: start
+      - color: "var(--contrast-100)"
+    state:
+      - text-align: center
+      - font-size: "var(--fs-400)"
+      - font-family: "Montserrat"
+      - font-weight: 500
+      - justify-self: center
+      - align-self: start
+      - color: "var(--contrast-100)"
+    label:
+      - text-align: center
+      - font-size: "var(--fs-300)"
+      - font-family: "Montserrat"
+      - font-weight: 500
+      - justify-self: center
+      - align-self: start
+      - color: "var(--contrast-100)"
+    custom_fields:
+      item1:
+        - display: inline-block
+
+  custom_fields:
+    item1: # control element column with three controls: up - action - down
+      card:
+        type: "custom:button-card"
+        show_name: false
+        show_icon: false
+        show_label: false
+        show_state: false
+        tap_action: none
+
+        styles:
+          grid:
+            - grid-template-areas: '"item1" "item2" "item3"'
+            - grid-template-rows: min-content min-content min-content
+            - grid-template-columns: 100%
+            - row-gap: 5px
+          card:
+            - height: auto
+            - width: auto
+            - background: "none"
+            - margin: 0 20px 0 20px
+
+        custom_fields:
+          item1: # open cover control (up chevron)
+            card:
+              type: "custom:button-card"
+              show_name: false
+              show_icon: true
+              show_label: false
+              show_state: false
+              entity: "[[[ return entity.entity_id ]]]"
+              icon: mdi:chevron-up
+
+              styles:
+                card:
+                  - box-shadow: "var(--box-shadow)"
+                  - padding: 0
+                  - border-radius: "var(--border-radius)"
+                  - height: 50px
+                  - width: 50px
+                  - background: "var(--contrast-10)"
+                  - border: solid 1px var(--contrast-100)
+
+                img_cell:
+                  - background-color: rgba(var(--color-theme),0.05)
+                  - align-self: center
+
+                icon:
+                  - color: "var(--contrast-100)"
+
+              tap_action:
+                action: "call-service"
+                service: "cover.open_cover"
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"
+
+          item2: # stop cover control
+            card:
+              type: "custom:button-card"
+
+              show_name: false
+              show_icon: true
+              show_label: false
+              show_state: false
+              entity: "[[[ return entity.entity_id ]]]"
+              icon: >
+                [[[
+                  var icon = entity.attributes.icon || "mdi:help-circle";
+                  var icon_state = {
+                    "open": "open",
+                    "opening": "open",
+                    "closed": "closed",
+                    "closing": "closed"
+                  };
+                  if(entity.attributes?.device_class){
+                    var device_class = entity.attributes?.device_class;
+                  }
+                  var icon_open = {
+                    "door": "mdi:door-open",
+                    "garage": "mdi:garage-open-variant",
+                    "shutter": "mdi:window-shutter-open",
+                  };
+                  var icon_closed = {
+                    "door": "mdi:door-closed",
+                    "garage": "mdi:garage-variant",
+                    "shutter": "mdi:window-shutter",
+                  };
+                  return (icon_state[entity.state]=='open' ? icon_open[device_class] : icon_closed[device_class]) || icon
+                ]]]
+
+              styles:
+                card:
+                  - box-shadow: "var(--box-shadow)"
+                  - padding: 0
+                  - border-radius: "var(--border-radius)"
+                  - height: 50px
+                  - width: 50px
+                  - background: "var(--contrast-10)"
+
+                img_cell:
+                  - height: 50px
+                  - width: 50px
+                  - background-color: >
+                      [[[
+                        var ic = entity.attributes.current_position;
+                        if(ic == "0" || entity.state == 'closed') {
+                          return "var(--color-blue)";
+                        }
+                        else return "var(--color-yellow)";
+                      ]]]
+                icon:
+                  - color: "var(--contrast-100)"
+                  - justify-self: start
+                  - padding: 0
+                  - margin: 0
+                  - width: 25px
+                state:
+                  - operator: "template"
+                    value: >
+                      [[[
+                        return entity.attributes.current_position == "100";
+                      ]]]
+                    styles:
+                      img_cell:
+                        - background-color: "var(--color-yellow)"
+                  - operator: "template"
+                    value: >
+                      [[[
+                        return entity.attributes.current_position == "0";
+                      ]]]
+                    styles:
+                      img_cell:
+                        - background-color: "var(--color-blue)"
+                  - operator: "template"
+                    value: >
+                      [[[
+                        return entity.state == "closing";
+                      ]]]
+                    styles:
+                      icon:
+                        - color: "var(--contrast-10)"
+                  - operator: "template"
+                    value: >
+                      [[[
+                        return entity.state == "opening";
+                      ]]]
+                    styles:
+                      icon:
+                        - color: "var(--contrast-10)"
+
+              tap_action:
+                action: "call-service"
+                service: "cover.stop_cover"
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"
+
+          item3: # close cover control (down chevron)
+            card:
+              type: "custom:button-card"
+              show_name: false
+              show_icon: true
+              show_label: false
+              show_state: false
+              entity: "[[[ return entity.entity_id ]]]"
+              icon: mdi:chevron-down
+              styles:
+                card:
+                  - height: 50px
+                  - width: 50px
+                  - background: "var(--contrast-10)"
+                  - padding: 0
+                  - border: solid 1px var(--contrast-100)
+
+                img_cell:
+                  - background-color: rgba(var(--color-theme),0.05)
+                icon:
+                  - color: "var(--contrast-100)"
+
+              tap_action:
+                action: "call-service"
+                service: "cover.close_cover"
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"

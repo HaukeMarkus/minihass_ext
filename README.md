@@ -34,40 +34,30 @@ The code for the extension of Fredrik's version can be found [here](https://)
 
 For the irrigation control of my four hunter valves I am using Robert Cook's implementation [irrigation unlimited](https://github.com/rgc99/irrigation_unlimited).
 
-The cards of my dashboard are basically two:
+The card I mad is for manually starting an irrigation per zone.
+The card contains the name of the valve you like it to display, a toggle switch enabling or disabling the valve and a duration slider.
+When tapping the whole card **and** with the toggle switch **enabled**, then the irrgation starts showing a countdown progress slider.
 
-![](/pictures/irrigation_animation.gif)
+![](/pictures/an_irrigation_cards.gif)
 
-The right card contains the valve entity and a runtime, that can be set, including a progress bar, that shows up, when triggered.
-The left card is the controller card, that initiates the manual run. The card can enable the valve by switching a toggle.
-
-Only, when enabled the manual service can be fired. The card then blinks "with ease" ;-) and the right valve card shows the progress of irrigation.
 
 My dashboard piece is as follows:
 
 ```yaml
-  # example for Zone 1
-  - type: horizontal-stack
-    cards:
-      - type: "custom:button-card"
-        template:
-          <b>- custom_card_manual</b>
-        variables:
-          name: Manuell
-          zone_name: "Z1: Hinten links"
-          background: "var(--gradient-blue)"
-          timer: input_datetime.irrigation_timer_z1
-        entity: binary_sensor.irrigation_unlimited_c2_z1
+  # Zone 1
+  # - type: horizontal-stack
+  #   cards:
+  - type: "custom:button-card"
+    template:
+      - custom_card_manual
+    variables:
+      name: Manuelle Beregnung
+      zone_name: Hinten links
+      background: var(--gradient-blue)
+      entity_timer: input_number.zone1_min
+      entity_timerval: sensor.iu_timer_z1
+    entity: binary_sensor.irrigation_unlimited_c2_z1
 
-      - type: "custom:button-card"
-        template:
-          - custom_card_irrigation_new
-        variables:
-          name: Beregnung
-          zone_name: "Z1: Hinten links"
-          background: "var(--gradient-green)"
-          timer: input_datetime.irrigation_timer_z1
-        entity: binary_sensor.irrigation_unlimited_c2_z1
 ```
 
 ## Setting up a window-shuttor card

@@ -170,45 +170,6 @@ custom_card_manual:
                   --_handle-shadow-color: var(--md-slider-handle-shadow-color, var(--md-sys-color-shadow, #2f600));
                   }
 
-        # type: custom:slider-entity-row
-        # entity: "[[[ return variables.entity_timer]]]"
-        # show_icon: false
-        # full_row: true
-        # colorize: true
-        # type: entities
-        # #name: Minuten
-        # entities:
-        #   type: custom:slider-entity-row
-        #   - entity: "[[[ return variables.entity_timer]]]"
-        #   show_icon: false
-        #   full_row: true
-
-        #   #- entity: "[[[ return variables.entity_timer]]]"
-        #   card_mod:
-        #     style:
-        #       hui-generic-entity-row $: |
-        #         .info.text-content {
-        #           display: none;
-        #         }
-        #         state-badge {
-        #           display: none;
-        #         }
-        #       .: |
-        #         ha-slider {
-        #           --md-sys-color-primary: var(--color-flamingo);
-        #           --_active-track-color: var(--color-cerise);
-        #           --_inactive-track-color: var(--sky);
-        #           --_handle-color: var(--color-cerise);
-        #           --_hover-handle-color: var(--color-cerise);
-
-        #         }
-        #         .flex .state {
-        #           color: var(--contrast-100);
-        #           font-size: var(--fs-500);
-        #           font-family: Montserrat;
-        #           font-weight: 600;
-        #         }
-
     tggl: # toggle butten for enabling entity
       card:
         type: "custom:button-card"

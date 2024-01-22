@@ -34,12 +34,13 @@ The code for the extension of Fredrik's version can be found [here](https://)
 
 For the irrigation control of my four hunter valves I am using Robert Cook's implementation [irrigation unlimited](https://github.com/rgc99/irrigation_unlimited).
 
-The card I mad is for manually starting an irrigation per zone.
+The card I made is for manually starting an irrigation per zone.
 The card contains the name of the valve you like it to display, a toggle switch enabling or disabling the valve and a duration slider.
 When tapping the whole card **and** with the toggle switch **enabled**, then the irrgation starts showing a countdown progress slider.
 
 ![](/pictures/an_irrigation_cards.gif)
 
+The code of the card can be found ![here](https://github.com/HaukeMarkus/minihass_ext/blob/main/custom_cards/custom_card_irrigation/custom_card_manual.yaml)
 
 My dashboard piece is as follows:
 

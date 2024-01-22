@@ -1,0 +1,305 @@
+#
+# The manual card controls the manual irrigation activity. It takes the name, zone name and timer.
+# The name is basically the title of the card.
+# The zone can be activated or deactivated
+# The card holds the no. of seconds to run
+# If tapped, the manual service of irrigation unlimited is triggered, given the zone entity, and time
+# set.
+#
+---
+custom_card_manual:
+  variables:
+    name:
+    entity_timer:
+    entity_timerval:
+    background:
+    zone_name:
+  name: "[[[ return variables.name ]]]"
+  label: "[[[ return variables.zone_name ]]]"
+  icon: mdi:water-outline
+  triggers_update: "all"
+  show_name: true
+  show_icon: true
+  show_label: true
+  show_state: false
+  tap_action:
+    action: call-service
+    service: irrigation_unlimited.manual_run
+    service_data:
+      time: "[[[ return states[variables.entity_timerval].state ]]]"
+      entity_id: "[[[ return entity.entity_id ]]]"
+  state:
+    - value: "off"
+      icon: mdi:water-outline
+      styles:
+        icon:
+          - color: "var(--contrast-100)"
+
+    - value: "on"
+      icon: mdi:water
+      styles:
+        icon:
+          - color: "var(--color-blue)"
+          - animation: rotate 2s linear infinite
+
+  styles:
+    grid: # basically a 4x2 matrix: first row name, second row label, third the toggle, forth timer secs
+      - grid-template-areas: '"n . i" "l . tggl" "slider . pr"'
+      - grid-template-rows: auto
+      - grid-template-columns: 58% 2% 40%
+      - column-gap: 2px
+      - row-gap: 2px
+
+    card:
+      #- height: 100%
+      #- width: 100%
+      - border-radius: "var(--border-radius)"
+      - padding: 1rem 1rem 0 1rem
+      # - overflow: visible
+      # - justify-items: center
+      # - justify-content: center
+
+    name:
+      - text-align: left
+      - font-size: "var(--fs-500)"
+      - font-family: Montserrat
+      - font-weight: 600
+      - justify-self: start
+      - align-self: center
+      - color: "var(--contrast-100)"
+      - z-index: 2
+      - overflow: visible
+      - padding-bottom: 1rem
+      - z-index: 2
+    label:
+      #- position: absolute
+      #- top: 5rem
+      - text-align: left
+      - font-size: "var(--fs-400)"
+      - font-family: Montserrat
+      - font-weight: 500
+      - justify-self: start
+      - align-self: center
+      - color: var(--contrast-100)
+      - z-index: 2
+      - overflow: visible
+      - background: none
+    img_cell:
+      - padding-right: 1rem
+      - display: block
+
+    icon:
+      - margin-right: 0
+      - float: right
+      #- display: inline-block
+      #- padding-right: 1rem
+      #- justify-self: end
+      #- align-self: end
+      - width: 25px
+      - color: "var(--color-blue)"
+      #- position: relative
+
+    custom_fields:
+      tggl:
+        - font-size: "var(--fs-300)"
+        - font-family: Montserrat
+        - font-weight: 400
+        - justify-self: end
+        - align-self: end
+        - color: var(--contrast-100)
+        - background: none
+        - padding-right: 1rem
+
+      slider:
+        - margin-left: 1rem
+        # #- text-align: right
+        # # - font-size: var(--fs-300)
+        # # - font-family: Montserrat
+        # # - font-weight: 400
+        - justify-self: start
+        #- align-self: start
+        # #- color: var(--contrast-100)
+        #- z-index: 4
+        - width: 80%
+
+      pr:
+        - font-size: var(--fs-300)
+        - font-family: Montserrat
+        - font-weight: 400
+        - justify-self: end
+        - align-self: center
+        - color: var(--contrast-100)
+        - z-index: auto
+        - width: 100%
+
+  extra_styles: |
+    @keyframes rotate {
+      from {transform: rotateY(-deg);}
+      to {transform: rotateY(360deg);}
+    }
+  custom_fields:
+    slider: # Slider for manual zone time
+      card:
+        type: entities
+        card_mod:
+          style: |
+            ha-card {
+              --ha-card-background: transparent;
+              border-color: transparent; 
+              box-shadow: none;
+            }
+        entities:
+          - type: custom:slider-entity-row
+            entity: "[[[ return variables.entity_timer]]]"
+            full_row: true
+            toggle: false
+            hide_state: false
+            card_mod:
+              style: |
+                ha-slider {
+                  
+                  --md-sys-color-primary: var(--flamingo);
+                  --md-slider-handle-width: 8px;
+                  --md-slider-handle-height: 16px;
+                  --_active-track-color: var(--color-cerise);
+                  --_handle-color: var(--color-cerise);
+                  --_pressed-handle-color: var(--color-cerise);
+                  --_focus-handle-color: var(--contrast-100);
+                  --_inactive-track-color: var(--sky);
+                  --_inactive-track-height: var(--md-slider-inactive-track-height, 4px);
+                  --_handle-shadow-color: var(--md-slider-handle-shadow-color, var(--md-sys-color-shadow, #2f600));
+                  }
+
+        # type: custom:slider-entity-row
+        # entity: "[[[ return variables.entity_timer]]]"
+        # show_icon: false
+        # full_row: true
+        # colorize: true
+        # type: entities
+        # #name: Minuten
+        # entities:
+        #   type: custom:slider-entity-row
+        #   - entity: "[[[ return variables.entity_timer]]]"
+        #   show_icon: false
+        #   full_row: true
+
+        #   #- entity: "[[[ return variables.entity_timer]]]"
+        #   card_mod:
+        #     style:
+        #       hui-generic-entity-row $: |
+        #         .info.text-content {
+        #           display: none;
+        #         }
+        #         state-badge {
+        #           display: none;
+        #         }
+        #       .: |
+        #         ha-slider {
+        #           --md-sys-color-primary: var(--color-flamingo);
+        #           --_active-track-color: var(--color-cerise);
+        #           --_inactive-track-color: var(--sky);
+        #           --_handle-color: var(--color-cerise);
+        #           --_hover-handle-color: var(--color-cerise);
+
+        #         }
+        #         .flex .state {
+        #           color: var(--contrast-100);
+        #           font-size: var(--fs-500);
+        #           font-family: Montserrat;
+        #           font-weight: 600;
+        #         }
+
+    tggl: # toggle butten for enabling entity
+      card:
+        type: "custom:button-card"
+        entity: "[[[ return entity.entity_id ]]]"
+        tap_action:
+          action: call-service
+          service: >
+            [[[
+              var stat = entity.attributes.enabled;
+              if (stat == true)
+                return "irrigation_unlimited.disable";
+              else
+                return "irrigation_unlimited.enable";
+            ]]]
+          service_data:
+            entity_id: entity
+
+        icon: >
+          [[[
+            var stat = entity.attributes.enabled;
+            if (stat == true ) {
+              return "mdi:toggle-switch-outline";
+            }
+            else
+              return "mdi:toggle-switch-off-outline";
+          ]]]
+        label: >
+          [[[
+            var stat = entity.attributes.enabled;
+            if (stat == true ) {
+              return "Zone ein";
+            }
+            else
+              return "Zone aus";
+          ]]]
+        show_name: false
+        show_icon: true
+        show_label: true
+        show_state: false
+        styles:
+          grid:
+            - grid-template-areas: '"i l"'
+            - grid-template-rows: 1fr
+            - grid-template-columns: min-content 1fr
+            - column-gap: 8px
+          card:
+            - background: none
+            - overflow: visible
+            - padding: 0
+          label:
+            - text-align: left
+            - font-size: "var(--fs-300)"
+            - font-family: "Montserrat"
+            - font-weight: 400
+            - color: var(--contrast-100)
+            - text-align: left
+            - justify-self: start
+          img_cell:
+            - justify-self: center
+          icon:
+            - width: "var(--button-small)"
+            - color: var(--contrast-100)
+            - padding: 0
+            - margin: 0
+    pr: # timer bar card without label and icon
+      card:
+        type: custom:timer-bar-card
+        card_mod:
+          style: |
+            .card-content {
+              color: var(--contrast-100);
+              font-size: var(--fs-300);
+              font-family: Montserrat;
+              font-weight: 400;
+            }
+
+        entities:
+          - entity: "[[[ return entity.entity_id ]]]"
+            icon: mdi:water-outline
+            active_icon: mdi:water
+            name: "[[[ return variables.zone_name ]]]"
+            translations:
+              "off": nicht aktiv
+              "on": laufend
+            bar_radius: 5px
+            bar_height: 5px
+            bar_foreground: var(--gradient-orange)
+        duration:
+          attribute: current_duration
+        tap_action:
+          action: more-info
+        layout: full_row
+        text-width: 0px # do not show remaining
+        debug: false

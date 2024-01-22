@@ -40,7 +40,7 @@ When tapping the whole card **and** with the toggle switch **enabled**, then the
 
 ![](/pictures/an_irrigation_cards.gif)
 
-The code of the card can be found ![here](https://github.com/HaukeMarkus/minihass_ext/blob/main/custom_cards/custom_card_irrigation/custom_card_manual.yaml)
+The code of the card can be found [here](https://github.com/HaukeMarkus/minihass_ext/blob/main/custom_cards/custom_card_irrigation/custom_card_manual.yaml)
 
 My dashboard piece is as follows:
 
